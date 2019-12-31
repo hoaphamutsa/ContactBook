@@ -9,9 +9,9 @@ class ContactBookAPI(object):
         c = conn.cursor()
         with conn:
             c.execute("""
-                SELECT * FROM contacts
-                WHERE name = :name
-                """, { 'name': contactName })
+                SELECT * FROM `contacts`
+                WHERE name LIKE :name
+                """, { 'name': contactName + '%' })
         return c.fetchone()
 
     @classmethod

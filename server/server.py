@@ -25,7 +25,7 @@ class OneContact(Resource):
 
 
 api.add_resource(AllContact, '/contacts') # Route_1
-api.add_resource(OneContact, '/contacts/<contact_name>') # Route_3
+api.add_resource(OneContact, '/contacts/<contactName>') # Route_3
 
 
 if __name__ == '__main__':
