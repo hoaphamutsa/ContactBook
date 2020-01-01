@@ -16,5 +16,8 @@ export class ContactService {
     return this.http.get<Contact[]>(`${this.contactUrl}`);
   }
 
+  getContact(name: string): Observable<Contact> {
+    return this.http.get<Contact>(`${this.contactUrl}/${name}`);
+  }
 
 }

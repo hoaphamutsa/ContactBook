@@ -1,8 +1,8 @@
 export class Contact {
-    name: string;
-    phoneNumber: string;
-    address: string;
-    email: string
+    public name: string;
+    public phoneNumber: string;
+    public address: string;
+    public email: string;
 
     constructor(name: string, phoneNumber: string,
                 address: string, email: string) {
