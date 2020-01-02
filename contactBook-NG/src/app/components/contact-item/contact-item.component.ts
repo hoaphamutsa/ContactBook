@@ -1,7 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { ContactService } from '../../services/contact.service';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Contact } from '../../models/Contact';
-import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-contact-item',
@@ -9,12 +7,11 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./contact-item.component.css']
 })
 export class ContactItemComponent implements OnInit {
-  @Input() rawContact: any;
+  @Input() rawContact: string[];
   contact: Contact;
+  @Output() deleteContactEmitter = new EventEmitter<string>();
 
-  constructor(private contactService: ContactService,
-              private router : Router,
-              private route : ActivatedRoute) { }
+  constructor() { }
 
   ngOnInit() {
     this.contact = new Contact(
@@ -24,8 +21,7 @@ export class ContactItemComponent implements OnInit {
       this.rawContact[3]);
   }
 
-  navigateToEdit() {
-    this.router.navigate(
-      ['/edit', this.contact.name]);
+  deleteContact() {
+    this.deleteContactEmitter.emit(this.contact.name);
   }
 }

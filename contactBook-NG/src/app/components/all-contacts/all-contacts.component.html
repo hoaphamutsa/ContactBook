@@ -1,4 +1,5 @@
 <app-contact-item 
     *ngFor="let rawContact of contacts"
-    [rawContact]="rawContact">
+    [rawContact]="rawContact"
+    (deleteContactEmitter)="OnDeleteContact($event)">
 </app-contact-item>

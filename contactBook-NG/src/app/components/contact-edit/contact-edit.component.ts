@@ -10,7 +10,11 @@ import { Contact } from 'src/app/models/Contact';
   styleUrls: ['./contact-edit.component.css']
 })
 export class ContactEditComponent implements OnInit {
-  contact: Contact =  new Contact("","","","");
+  name: string;
+  phoneNumber: string;
+  address: string;
+  email: string;
+  contactID: number;
 
   constructor(private contactService : ContactService,
               private router : Router,
@@ -19,12 +23,15 @@ export class ContactEditComponent implements OnInit {
   ngOnInit() {
     const contactName = this.route.snapshot.params['name'];
     this.contactService.getContact(contactName).subscribe(contact => {
-      
-      this.contact = new Contact(
-        contact[0], contact[1], contact[2], contact[3]
-      );
+      this.name = contact[0];
+      this.phoneNumber = contact[1];
+      this.address = contact[2];
+      this.email = contact[3];
     });
     
   }
 
+  onEditContact() {
+    console.log("contact change clicked");
+  }
 }

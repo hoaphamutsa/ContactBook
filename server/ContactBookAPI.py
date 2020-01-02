@@ -15,7 +15,7 @@ class ContactBookAPI(object):
         return c.fetchone()
 
     @classmethod
-    def getAllContact(cls):
+    def getAllContacts(cls):
         conn = sqlite3.connect('contact.db')
         c = conn.cursor()
         with conn:
@@ -45,7 +45,7 @@ class ContactBookAPI(object):
             )
 
     @classmethod
-    def updateContact(cls, contact: Contact):
+    def updateContact(cls, contact: Contact, contactId: int=0):
         conn = sqlite3.connect('contact.db')
         c = conn.cursor()
         with conn:

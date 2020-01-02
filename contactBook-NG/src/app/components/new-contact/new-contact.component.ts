@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { ContactService } from 'src/app/services/contact.service';
+import { Contact } from 'src/app/models/Contact';
+
 
 @Component({
   selector: 'app-new-contact',
@@ -6,10 +9,27 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./new-contact.component.css']
 })
 export class NewContactComponent implements OnInit {
+  name: string;
+  phoneNumber: string;
+  address: string;
+  email: string;
 
-  constructor() { }
+  constructor(private contactService : ContactService) { }
 
   ngOnInit() {
   }
 
+  onSubmit() {
+    const contact = new Contact(
+      this.name,
+      this.phoneNumber,
+      this.address,
+      this.email
+    );
+    this.contactService.createContact(contact).subscribe(
+      response => {
+        console.log(response);
+      }
+    );
+  }
 }

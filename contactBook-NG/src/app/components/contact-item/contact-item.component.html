@@ -1,7 +1,7 @@
 <div class="contact-item">
     <p>
         Name: {{ contact.name }}&nbsp;
-        <button class='btn' [routerLink]="['/edit', contact.name]">Edit</button>&nbsp;
-        <button class="btn">Delete</button>
+        <button class="btn" [routerLink]="['/edit', contact.name]">Edit</button>&nbsp;
+        <button class="btn" (click)="deleteContact()">Delete</button>
     </p>
 </div>

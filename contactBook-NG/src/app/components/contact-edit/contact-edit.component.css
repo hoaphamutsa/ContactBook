@@ -1,0 +1,16 @@
+.edit-btn {
+    margin-top: 10px;
+}
+
+.form-control {
+    margin-top: 10px;
+}
+
+.form-input {
+    width: 30%;
+    padding: 12px;
+    margin-left: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
