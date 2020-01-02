@@ -14,7 +14,6 @@ export class ContactEditComponent implements OnInit {
   phoneNumber: string;
   address: string;
   email: string;
-  contactID: number;
 
   constructor(private contactService : ContactService,
               private router : Router,
@@ -32,6 +31,22 @@ export class ContactEditComponent implements OnInit {
   }
 
   onEditContact() {
-    console.log("contact change clicked");
+    const contact = new Contact(
+      this.name,
+      this.phoneNumber,
+      this.address,
+      this.email
+    );
+    this.contactService.updateContact(contact).subscribe(
+      response => {
+        if (!response['result']) {
+          alert('Something wrong happened');
+        }
+        else {
+          document.location.href = '/';
+          alert(`Contact Name: ${contact.name} has been changed.`);
+        }
+      }
+    );
   }
 }

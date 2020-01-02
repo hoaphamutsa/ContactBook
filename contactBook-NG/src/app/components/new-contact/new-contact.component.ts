@@ -28,7 +28,13 @@ export class NewContactComponent implements OnInit {
     );
     this.contactService.createContact(contact).subscribe(
       response => {
-        console.log(response);
+        if (!response['result']) {
+          alert('Something wrong happened');
+        }
+        else {
+          document.location.href = '/';
+          alert(`Contact Name: ${contact.name} has been created.`);
+        }
       }
     );
   }

@@ -42,8 +42,7 @@ def create_contact():
     if not json.loads(raw_string):
         abort(400)
 
-    json_object = json.loads(raw_string)['content']
-    contact = namedtuple("Contact", json_object.keys())(*json_object.values())
+    contact = convertJsonToContact(raw_string)
     ContactBookAPI().createContact(contact)
     return jsonify({"result": True})
 
@@ -54,13 +53,21 @@ def remove_contact(contact_name):
     ContactBookAPI().removeContact(contact_name)
     return jsonify({'result': True})
 
-@app.route('/contacts/api/v1.0/<contact_id>', methods=['PUT'])
-def update_contact(contactId: int):
-    if not contactId:
-        abort(404)
-
+@app.route('/contacts/api/v1.0', methods=['PUT'])
+def update_contact():
+    raw_string = str(request.data)[2:-1]
+    
+    if not raw_string:
+        abort(400)
+    if not json.loads(raw_string):
+        abort(400)
+    contact = convertJsonToContact(raw_string)
+    ContactBookAPI().updateContact(contact)
     return jsonify({'result': True})
     
+def convertJsonToContact(raw_json):
+    json_object = json.loads(raw_json)['content']
+    return namedtuple("Contact", json_object.keys())(*json_object.values())
 
 if __name__ == '__main__':
     app.run(port=5002, debug=True)

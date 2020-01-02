@@ -22,10 +22,12 @@ export class ContactService {
     return this.http.get<Contact[]>(`${this.contactUrl}`);
   }
 
+  // Get One Contact
   getContact(contactName: string): Observable<Contact> {
     return this.http.get<Contact>(`${this.contactUrl}/${contactName}`);
   }
 
+  // Create Contact
   createContact(contact: Contact):Observable<Contact> {
     return this.http.post<Contact>(
       `${this.contactUrl}`,
@@ -33,7 +35,18 @@ export class ContactService {
       httpOptions );
   }
 
+  // Update Contact
+  updateContact(contact: Contact): Observable<Contact> {
+    return this.http.put<Contact>(
+      `${this.contactUrl}`,
+      { 'content': contact },
+      httpOptions );
+  }
+
+  // Remove Contact
   removeContact(contactName: string): Observable<any> {
-    return this.http.delete<Contact>(`${this.contactUrl}/${contactName}`, { responseType: 'json' });
+    return this.http.delete<Contact>(
+      `${this.contactUrl}/${contactName}`,
+      { responseType: 'json' });
   }
 }
