@@ -1,73 +1,79 @@
-from flask import Flask, request
-from flask_restful import Resource, Api
-from flask_jsonpify import jsonify
-from flask import abort
-from flask_cors import CORS, cross_origin
-from flask import make_response
-import json
-from collections import namedtuple
-
-from ContactBookAPI import ContactBookAPI
 from Contact import Contact
+import sqlite3
 
-app = Flask(__name__)
-CORS(app)
+class ContactService(object):
 
-@app.errorhandler(404)
-def not_found(error):
-    return make_response(jsonify({'error': 'Not found'}), 404)
+    @classmethod
+    def getContact(cls, contactName: str):
+        conn = sqlite3.connect('contact.db')
+        c = conn.cursor()
+        with conn:
+            c.execute("""
+                SELECT * FROM `contacts`
+                WHERE name LIKE :name
+                """, { 'name': contactName + '%' })
+        return c.fetchone()
 
-@app.route('/contacts/api/v1.0', methods=['GET'])
-def get_contacts():
-    return jsonify( ContactBookAPI().getAllContacts() ), 200
+    @classmethod
+    def getAllContacts(cls):
+        conn = sqlite3.connect('contact.db')
+        c = conn.cursor()
+        with conn:
+            c.execute("""
+                SELECT * FROM contacts
+                """)
+        return c.fetchall()
 
-@app.route('/contacts/api/v1.0/<contact_name>', methods=['GET'])
-def get_contact(contact_name):
-    if len(contact_name) == 0:
-        abort(404)
+    @classmethod
+    def createContact(cls, contact: Contact):
+        conn = sqlite3.connect('contact.db')
+        c = conn.cursor()
+        with conn:
+            c.execute("""
+                INSERT INTO contacts VALUES (
+                    :name,
+                    :phone,
+                    :address,
+                    :email
+                );""", 
+                {
+                    'name': contact.name,
+                    'phone': contact.phoneNumber,
+                    'address': contact.address,
+                    'email': contact.email
+                }
+            )
+
+    @classmethod
+    def updateContact(cls, contact: Contact, contactId: int=0):
+        conn = sqlite3.connect('contact.db')
+        c = conn.cursor()
+        with conn:
+            c.execute("""
+                UPDATE contacts SET
+                    phone = :phone,
+                    address = :address,
+                    email = :email
+                WHERE name = :name
+                """,
+                {
+                    'phone': contact.phoneNumber,
+                    'address': contact.address,
+                    'email': contact.email,
+                    'name': contact.name
+                }
+            )
+
+    @classmethod
+    def removeContact(cls, contactName: str):
+        conn = sqlite3.connect('contact.db')
+        c = conn.cursor()
+        with conn:
+            c.execute("""
+                DELETE from contacts 
+                WHERE name = :name
+                """,
+                { 'name': contactName }
+            )
+
     
-    result = ContactBookAPI().getContact(contact_name)
-    if result == None:
-        abort(404)
-
-    return jsonify(result)
-
-@app.route('/contacts/api/v1.0', methods=['POST'])
-def create_contact():
-    
-    raw_string = str(request.data)[2:-1]
-    
-    if not raw_string:
-        abort(400)
-    if not json.loads(raw_string):
-        abort(400)
-
-    contact = convertJsonToContact(raw_string)
-    ContactBookAPI().createContact(contact)
-    return jsonify({"result": True})
-
-@app.route('/contacts/api/v1.0/<contact_name>', methods=['DELETE'])
-def remove_contact(contact_name):
-    if len(contact_name) == 0:
-        abort(404)
-    ContactBookAPI().removeContact(contact_name)
-    return jsonify({'result': True})
-
-@app.route('/contacts/api/v1.0', methods=['PUT'])
-def update_contact():
-    raw_string = str(request.data)[2:-1]
-    
-    if not raw_string:
-        abort(400)
-    if not json.loads(raw_string):
-        abort(400)
-    contact = convertJsonToContact(raw_string)
-    ContactBookAPI().updateContact(contact)
-    return jsonify({'result': True})
-    
-def convertJsonToContact(raw_json):
-    json_object = json.loads(raw_json)['content']
-    return namedtuple("Contact", json_object.keys())(*json_object.values())
-
-if __name__ == '__main__':
-    app.run(port=5002, debug=True)

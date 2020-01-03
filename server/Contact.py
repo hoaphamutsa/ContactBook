@@ -4,10 +4,4 @@ class Contact(object):
         self.phoneNumber = phoneNumber
         self.address = address
         self.email = email
-
-    def printContactInfo(self):
-        print("Name: ", self.name)
-        print("Phone: ", self.phoneNumber)
-        print("Address: ", self.address)
-        print("Email: ", self.email)
     
