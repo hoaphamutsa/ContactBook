@@ -1,11 +1,11 @@
 from flask import Flask, request, Response
-from flask_restful import Resource, Api
+from flask_restful import Api
 from flask_jsonpify import jsonify
 from flask import abort
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from flask import make_response
-import json
 from collections import namedtuple
+import json
 
 from ContactService import ContactService
 from Contact import Contact
