@@ -11,6 +11,9 @@ from ContactService import ContactService
 from Contact import Contact
 
 app = Flask(__name__)
+
+# Enable Cross Origin Resource Sharing 
+# https://github.com/corydolphin/flask-cors
 CORS(app)
 
 @app.errorhandler(404)

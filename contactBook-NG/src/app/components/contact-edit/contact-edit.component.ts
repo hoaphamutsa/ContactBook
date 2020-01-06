@@ -16,7 +16,6 @@ export class ContactEditComponent implements OnInit {
   email: string;
 
   constructor(private contactService : ContactService,
-              private router : Router,
               private route : ActivatedRoute) { }
 
   ngOnInit() {
