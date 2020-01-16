@@ -113,7 +113,8 @@ def convertJsonToContact(raw_json) -> Contact:
     }"
     """
     json_object = json.loads(raw_json)['content']
-    return namedtuple("Contact", json_object.keys())(*json_object.values())
+    contact = namedtuple("Contact", json_object.keys())
+    return contact._make(json_object.values())
 
 if __name__ == '__main__':
     app.run(port=5002, debug=True)
